@@ -1,10 +1,12 @@
 class User < ApplicationRecord
-	attr_accessor :remember_token
+	attr_accessor :remember_token, :activation_token
 	# 名前が存在していることを確認し、最大文字数を50文字までに制限
 	validates(:name, presence: true,length:{maximum:50})
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	# dbに保存する前に、emailを小文字に
-	before_save { self.email = email.downcase}
+	before_save { email.downcase! }
+	#ユーザーが作成される前に、
+	before_create :create_activation_digest
 	# emailが存在していることを確認し、最大文字数を255文字までに制限
 	validates :email, presence: true,length:{maximum:255},
 		format: { with: VALID_EMAIL_REGEX },
@@ -41,5 +43,12 @@ class User < ApplicationRecord
 	def forget
 	  update_attribute(:remember_digest, nil)
 	end
+
+	private
+
+		def create_activation_digest
+			self.activation_token = User.new_token
+			self.activation_digest = User.digest(activation_token)
+		end
 
 end
