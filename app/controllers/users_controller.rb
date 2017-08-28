@@ -20,11 +20,11 @@ class UsersController < ApplicationController
   	@user = User.new(user_params)
 
   	if @user.save
-      #アカウントを作成できた場合、その際にログイン
-      log_in @user
-  		flash[:success] = "Welcome to the Sample App!"
+      #アカウントを作成した場合、メールで認証を行う
+      @user.send_activation_email
+  		flash[:info] = "Please check your email to activate your account."
   		#ユーザーページにリダイレクトさせる。
-  		redirect_to @user
+  		redirect_to root_url
   	else
   		render 'new'
   	end
