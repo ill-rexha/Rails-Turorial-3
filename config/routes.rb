@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
   resources :password_resets,     only: [:new, :create, :edit, :update]
 
+  resources :microposts, only:[:create, :destroy]
+
   root 'static_pages#home'
 
   get '/help', to: 'static_pages#help'
