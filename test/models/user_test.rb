@@ -58,7 +58,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal mixed_case_email.downcase, @user.reload.email
   end
 
-    # test code about password
+    # test code for password
     #========================================================================================================================================
   test "password should be present(nonblank)" do
   	@user.password = @user.password_confirmation = " "*6
@@ -73,5 +73,19 @@ class UserTest < ActiveSupport::TestCase
   test "authenticated? should return false for a user with nil digest" do
     assert_not @user.authenticated?(:remember,'')
   end
-  
+
+  # test code for micropost
+    #========================================================================================================================================
+  # if admin destroy user , it should delete with microposts
+  test "associated microposts should be destroyed" do
+    # ユーザーを作成
+    @user.save
+    # マイクロソフトを作成
+    @user.microposts.create!(content: "Lorem ipsum")
+    # マイクロソフトの数が当たっているか確認。
+    assert_difference 'Micropost.count', -1 do
+      # ユーザーを削除する。
+      @user.destroy
+    end
+  end
 end
