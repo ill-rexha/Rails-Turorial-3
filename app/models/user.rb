@@ -15,6 +15,8 @@ class User < ApplicationRecord
 	# nilのパスワードを有効にする
 	# has_secure_passwordによって、生成時に生成時にチェックが入っているので、大丈夫
 	validates :password, presence: true, length: { minimum: 6 },allow_nil:true
+	# ユーザーがマイクロソフトを複数所有する。
+	has_many :microposts
 
 	# 渡された文字列のハッシュ値を返す
 	def self.digest(string)
