@@ -43,14 +43,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def logged_in_user
-      unless logged_in?
-        # ログインしてないのに、編集をしようとした場合にログインを促すflashを出す。
-        store_location
-       flash[:danger] = "Please log in."
-       redirect_to login_url
-      end
-  end
   # 正しいuserかどうか確認する。
   def correct_user
       @user = User.find(params[:id])
